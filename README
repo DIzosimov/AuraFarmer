@@ -1,0 +1,8 @@
+# Code Compilation
+g++ src/*.cpp -o game \
+-I/opt/homebrew/include \
+-L/opt/homebrew/lib \
+-lraylib -framework OpenGL -framework Cocoa -framework IOKit
+
+# Game Command
+./game
