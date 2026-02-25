@@ -3,6 +3,7 @@
 #include <vector>   
 #include "Player.hpp"
 #include "Gem.hpp"
+#include "Enemy.hpp"
 
 int main()
 {
@@ -23,6 +24,10 @@ int main()
     const int MAX_GEMS = 50;
     Gem gemPool[MAX_GEMS];
 
+    //Enemy Setup
+    const int MAX_ENEMIES = 100;
+    Enemy enemyPool[MAX_ENEMIES];
+
     for (int i = 0; i < 20; i++) {
         Vector2 randomPos = { (float)GetRandomValue(100, 1100), (float)GetRandomValue(100, 600) };
         gemPool[i].Spawn(randomPos, BASIC);
@@ -35,25 +40,36 @@ int main()
         // Update
         player.Update();
 
+        //Enemies
+        for (int i = 0; i < MAX_ENEMIES; i++) {
+            if (enemyPool[i].IsActive()) {
+                enemyPool[i].Update(player.GetPosition());
+                float dist = Vector2Distance(player.GetPosition(), enemyPool[i].GetPosition());
+                if (dist < player.GetAuraRadius()) {
+                    enemyPool[i].TakeDamage(10.0f * GetFrameTime());
+                }
+            }
+        }
         //Gems
         for (int i = 0; i < MAX_GEMS; i++) {
-            if (gemPool[i].isActive()) {
+            if (gemPool[i].IsActive()) {
                 gemPool[i].Update();
-            }
-            //COLLISION DETECTION
-            float dist = Vector2Distance(player.GetPosition(), gemPool[i].GetPosition());
+                
+                //COLLISION DETECTION
+                float dist = Vector2Distance(player.GetPosition(), gemPool[i].GetPosition());
 
-            //If distance < aura radius, harvest (change to magnet?)
-            if (dist < player.GetAuraRadius()) {
-                player.IncreaseAura(gemPool[i].GetValue());
-                gemPool[i].Deactivate();
+                //If distance < aura radius, harvest (change to magnet?)
+                if (dist < player.GetAuraRadius()) {
+                    player.IncreaseAura(gemPool[i].GetValue());
+                    gemPool[i].Deactivate();
 
-                //RESPAWN
-                Vector2 newPos = {
-                    (float)GetRandomValue(50, screenWidth - 50), 
-                    (float)GetRandomValue(50, screenHeight - 50)
-                };
-                gemPool[i].Spawn(newPos, BASIC);
+                    //RESPAWN
+                    Vector2 newPos = {
+                        (float)GetRandomValue(50, screenWidth - 50), 
+                        (float)GetRandomValue(50, screenHeight - 50)
+                    };
+                    gemPool[i].Spawn(newPos, BASIC);
+                }
             }
         }
         // Draw
@@ -63,6 +79,12 @@ int main()
 
             for (int i = 0; i < MAX_GEMS; i++) {
                 gemPool[i].Draw();
+            }
+
+            for (int i = 0; i < MAX_ENEMIES; i++) {
+                if (enemyPool[i].IsActive()) {
+                    enemyPool[i].Draw();
+                }
             }
 
             player.Draw();

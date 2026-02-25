@@ -30,13 +30,13 @@ void Gem::Spawn(Vector2 pos, GemType type) {
 }
 
 void Gem::Update() {
-  if (!isActive) return;
+  if (!IsActive()) return;
 
   pulse += GetFrameTime() * 5.0f;
 }
 
 void Gem::Draw() {
-  if (!isActive) return;
+  if (!IsActive()) return;
 
   Color gemColor = GREEN;
   if (type == RARE) gemColor = BLUE;

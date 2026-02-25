@@ -15,7 +15,7 @@ class Gem {
     void Draw();
 
     //Data
-    bool isActive() const { return active; }
+    bool IsActive() const { return active; }
     Vector2 GetPosition() const { return position; }
     float GetValue() const { return expValue; }
 
