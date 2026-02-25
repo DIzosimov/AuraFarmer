@@ -21,9 +21,17 @@ class GameManager {
     Enemy enemyPool[MAX_ENEMIES];
     Gem gemPool[MAX_GEMS];
 
+    float gemSpawnTimer;
+    float gemSpawnRate = 3.0f;  // Spawn a natural gem every 3 seconds
+    
+    float enemyWaveTimer;
+    float enemyWaveRate = 10.0f; // Spawn a wave every 10 seconds
+
     void HandleCombat();
     void HandleHarvesting();
-    void SpawnWave();
+    void SpawnWave(int count);
+    void CreateGemAt(Vector2 position);
+    void SpawnInitialGems(int count);
 };
 
 #endif
